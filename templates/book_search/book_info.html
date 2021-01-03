@@ -68,35 +68,37 @@
             </p>
             <p>
                 {% if user.is_authenticated %}
-                    {% if mark.value %}
-                        <p>
-                            Ваша оценка: {{ mark.value }}
-                        </p>
-                    {% else %}
-                        {% if is_bbc == '0' %}
-                            <form method="POST" action="{% url 'add_rating' book.id 0 %}">
-                                {% csrf_token %}
-                                <p>
-                                    {{ rate_form|crispy }}
-                                </p>
-                                <input type="submit" value="Оценить">
-                            </form>
-                        {% elif is_bbc == '1' %}
-                            <form method="POST" action="{% url 'add_rating' book.id 1 %}">
-                                {% csrf_token %}
-                                <p>
-                                    {{ rate_form|crispy }}
-                                </p>
-                                <input type="submit" value="Оценить">
-                            </form>
+                    {% if readd.is_read %}
+                        {% if mark.value %}
+                            <p>
+                                Ваша оценка: {{ mark.value }}
+                            </p>
                         {% else %}
-                            <form method="POST" action="{% url 'add_rating' book.id 2 %}">
-                                {% csrf_token %}
-                                <p>
-                                    {{ rate_form|crispy }}
-                                </p>
-                                <input type="submit" value="Оценить">
-                            </form>
+                            {% if is_bbc == '0' %}
+                                <form method="POST" action="{% url 'add_rating' book.id 0 %}">
+                                    {% csrf_token %}
+                                    <p>
+                                        {{ rate_form|crispy }}
+                                    </p>
+                                    <input type="submit" value="Оценить">
+                                </form>
+                            {% elif is_bbc == '1' %}
+                                <form method="POST" action="{% url 'add_rating' book.id 1 %}">
+                                    {% csrf_token %}
+                                    <p>
+                                        {{ rate_form|crispy }}
+                                    </p>
+                                    <input type="submit" value="Оценить">
+                                </form>
+                            {% else %}
+                                <form method="POST" action="{% url 'add_rating' book.id 2 %}">
+                                    {% csrf_token %}
+                                    <p>
+                                        {{ rate_form|crispy }}
+                                    </p>
+                                    <input type="submit" value="Оценить">
+                                </form>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 {% endif %} <br>
@@ -186,18 +188,22 @@
                 <button>Войдите, чтобы оставить комментарий к книге</button>
             </form>
         {% else %}
-            {% if is_bbc == '0' %}
-                <form action="{% url 'add_comment' book.id 0 %}">
-                    <button>Оставить комментарий</button>
-                </form>
-            {% elif is_bbc == '1' %}
-                <form action="{% url 'add_comment' book.id 1 %}">
-                    <button>Оставить комментарий</button>
-                </form>
+            {% if readd.is_read %}
+                {% if is_bbc == '0' %}
+                    <form action="{% url 'add_comment' book.id 0 %}">
+                        <button>Оставить комментарий</button>
+                    </form>
+                {% elif is_bbc == '1' %}
+                    <form action="{% url 'add_comment' book.id 1 %}">
+                        <button>Оставить комментарий</button>
+                    </form>
+                {% else %}
+                    <form action="{% url 'add_comment' book.id 2 %}">
+                        <button>Оставить комментарий</button>
+                    </form>
+                {% endif %}
             {% else %}
-               <form action="{% url 'add_comment' book.id 2 %}">
-                    <button>Оставить комментарий</button>
-                </form>
+                <h4>Вы сможете оставить комментарий после прочтения книги</h4>
             {% endif %}
         {% endif %} <br>
         {% if comments %}
