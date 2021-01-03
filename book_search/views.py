@@ -561,7 +561,8 @@ def add_book_with_litres(request):
                 b.image.save(name, ContentFile(p.content), save=True)
                 b.save()
             messages.success(request, 'Книга успешно добавлена!')
-            return redirect('person')
+            return redirect('info_about_book', b.id, 0)
         else:
+            this_book = models.Book.objects.filter(name=book_name, author=book_author)[0]
             messages.error(request, 'Книга уже зарегистрирована')
-            return redirect('person')
+            return redirect('info_about_book', this_book.id, 0)
