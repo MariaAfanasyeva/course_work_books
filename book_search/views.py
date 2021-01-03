@@ -64,7 +64,10 @@ def main_activity_view(request):
 def books_per_genres(request, genre):
     genres = models.Genres.objects.all()
     books = models.Book.objects.filter(genre_id__name=genre)
-    return render(request, 'book_search/books_genres.html', {'genres': genres, 'books': books, 'my_genre': genre})
+    paginator = Paginator(books, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'book_search/books_genres.html', {'genres': genres, 'page_obj': page_obj, 'my_genre': genre})
 
 
 def get_all_authors(request):

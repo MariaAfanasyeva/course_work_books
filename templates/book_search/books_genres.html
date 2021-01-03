@@ -6,7 +6,7 @@
 
 {% block body %}
     <h1>Книги в жанре {{ my_genre }}</h1>
-    {% for book in books %}
+    {% for book in page_obj %}
         <div class="card text-center">
             <div class="card-header">
                 <a href="{% url 'books_author' book.author %}" ><u>{{ book.author }}</u></a>
@@ -25,4 +25,21 @@
             </div>
         </div><br>
     {% endfor %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="btn btn-primary">&laquo; 1</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 {% endblock %}
