@@ -435,13 +435,15 @@ def personal(request):
 
 
 def wish_list(request):
+    genres = models.Genres.objects.all()
     user_wish_list = models.WishList.objects.filter(user_id=request.user)
-    return render(request, 'book_search/wish_list.html', {'user_wish_list': user_wish_list})
+    return render(request, 'book_search/wish_list.html', {'user_wish_list': user_wish_list, 'genres': genres})
 
 
 def read_list(request):
+    genres = models.Genres.objects.all()
     user_read_list = models.Read.objects.filter(user_id=request.user)
-    return render(request, 'book_search/book_you_read.html', {'user_read_list': user_read_list})
+    return render(request, 'book_search/book_you_read.html', {'user_read_list': user_read_list, 'genres': genres})
 
 
 def add_book_into_wishlist(request, book_id, is_bbc):
