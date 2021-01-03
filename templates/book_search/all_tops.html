@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    {% if not tops %}
+        <h3>Рейтингов пока нет</h3>
+    {% else %}
+        {% for top in tops %}
+            <div class="card" xmlns="http://www.w3.org/1999/html">
+                <h5 class="card-header">Рейтинг от {{ top.author_id }}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Название рейтинга: <u>{{ top.name }}</u></h5>
+                    <p class="card-text">
+                        {% for book in top.books.all %}
+                            <p>
+                                # {{ book.place_in_top }}: <a href="{% url 'info_about_book' book.id 2 %}">{{ book.name }}</a>
+                            </p>
+                        {% endfor %}
+                    </p>
+                </div>
+            </div><br>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

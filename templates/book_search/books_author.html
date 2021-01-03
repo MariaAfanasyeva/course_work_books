@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+
+{% block title %}
+    Main title
+{% endblock %}
+
+{% block body %}
+    <h1>Книги автора {{ author }}</h1>
+    {% for book in all_books %}
+        <div class="card text-center">
+            <div class="card-header">
+                {{ book }}
+            </div>
+            <div class="card-body">
+                <div class="media">
+                    {% for books in books_by_author|get_obj:book|get_obj:'query' %}
+                        {% if books.name == book %}
+                            <img src="{{ books.image.url }}" height="250" width="150">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="media-body">
+                    <p class="card-text">
+                        {% for books in books_by_author|get_obj:book|get_obj:'query' %}
+                            {% if books.name == book %}
+                                {{ books.description }}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                    {% for books in books_by_author|get_obj:book|get_obj:'query' %}
+                        {% if books.name == book %}
+                            <a href="{% url 'info_about_book' books.id 0 %}" class="btn btn-primary">Подробнее</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                <h5>Жанры: </h5>
+                {% for genres in books_by_author|get_obj:book|get_obj:'genres' %}
+                    <a href="{% url 'book_per_genres' genres %}">{{ genres }}</a>
+                {% endfor %}
+            </div>
+        </div><br>
+{#        <p>#}
+{#            "{{ book.name }}" написанная {{ book.author }} <br>#}
+{#            <img src="{{ book.image.url }}" height="250" width="150"> <br>#}
+{#            <form action="{% url 'info_about_book' book.id 0 %}">#}
+{#                <button>Подробнее...</button>#}
+{#            </form>#}
+{#            <a href="{% url 'info_about_book' book.id 0 %}" class="button">Подробнее...</a>#}
+{#        </p>#}
+    {% endfor %}
+{% endblock %}

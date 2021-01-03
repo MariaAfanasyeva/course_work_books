@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <p>
+        {% if is_read %}
+            {% for book in is_read %}
+                <p>Прочитанные книги: {{ book.book_id.name }}</p>
+            {% endfor %}
+        {% else %}
+            Ты лох, который ничего не прочитал((
+        {% endif %}
+    </p>
+    <p>
+        {% if wish_list %}
+            <p>Список желаемого:</p>
+            {% for book in wish_list %}
+                <p>{{ book.books.name }}   <a href="{% url 'delete_wishlist' book.books.id 0 %}">Удалить</a> </p>
+            {% endfor %}
+        {% else %}
+        {% endif %}
+    </p>
+    <a class="nav-link" href="{% url 'add_book' %}">Создать свой рейтинг</a>
+    <br><br>
+    <form action="{% url 'add_with_oz' %}" method="get">
+        <input name="q" type="text" placeholder="Search...">
+    </form>
+{% endblock %}

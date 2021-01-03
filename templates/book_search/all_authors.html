@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+
+{% block body %}
+    {% for author in page_obj %}
+        <div class="card">
+            <h5 class="card-header">{{ author }}</h5>
+            <div class="card-body">
+                <h5 class="card-title"><u>Книги, написанные автором: </u></h5>
+                <p class="card-text">
+                    {% for book in books_per_authors|get_obj:author %}
+                        <p>
+                            {% ifchanged %}
+                                {{ book.name }}
+                            {% endifchanged %}
+                        </p>
+                    {% endfor %}
+                </p>
+                <a href="{% url 'books_author' author %}" class="btn btn-primary">Подробнее</a>
+            </div>
+        </div><br>
+    {% endfor %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="btn btn-primary">&laquo; 1</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

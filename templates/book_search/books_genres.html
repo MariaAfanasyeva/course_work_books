@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Main title
+{% endblock %}
+
+{% block body %}
+    <h1>Книги в жанре {{ my_genre }}</h1>
+    {% for book in books %}
+        <div class="card text-center">
+            <div class="card-header">
+                <a href="{% url 'books_author' book.author %}" ><u>{{ book.author }}</u></a>
+            </div>
+            <div class="card-body">
+                <div class="media">
+                    <img src="{{ book.image.url }}" width="150" height="250">
+                </div>
+                <div class="media-body">
+                    <div class="media-body">
+                        <h5 class="card-title">{{ book.name }}</h5>
+                        <p class="card-text">{{ book.description|safe|linebreaks|truncatewords:50 }}</p>
+                        <a href="{% url 'info_about_book' book.id 0 %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+    {% endfor %}
+{% endblock %}

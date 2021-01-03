@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+
+{% block body %}
+    <p class="text-justify">
+        «Какую книгу прочитать следующей»? Часто, закрыв последнюю страницу книги, вы задаете себе этот вопрос?
+        Вы любите читать книги, знаете много прекрасных авторов, перед вами обширный список лучших книг, но все же
+        какую вы хотите выбрать именно сейчас? Сервис подбора лучших книг поможет ответить на этот вопрос
+    </p><br><br>
+    <h3>Книжные жанры на нашем сервисе</h3>
+    <p>
+        Наш сервис о книгах предлагает широкий ассортимент литературных произведений.
+        Это позволяет каждому отыскать то, что ему по вкусу. Чаще всего читатели обращаются к таким жанрам, как:
+    </p>
+    <ul>
+        <li><a href="{% url 'book_per_genres' 'Фентези' %}">Фентези</a></li>
+        <li><a href="{% url 'book_per_genres' 'Ужасы' %}">Ужасы</a></li>
+        <li><a href="{% url 'book_per_genres' 'Поэзия' %}">Поэзия</a></li>
+        <li><a href="{% url 'book_per_genres' 'Детективы' %}">Детективы</a></li>
+        <li><a href="{% url 'book_per_genres' 'Бизнес-литература' %}">Бизнес-литература</a></li>
+    </ul><br><br>
+    <p><h3>Популярные авторы на нашем сервисе</h3></p>
+    <ul>
+        <li><a href="{% url 'books_author' 'Терри Пратчетт' %}">Терри Пратчетт</a></li>
+        <li><a href="{% url 'books_author' 'Артур Конан Дойл' %}">Артур Конан Дойл</a></li>
+        <li><a href="{% url 'books_author' 'Джоан К. Роулинг' %}">Джоан К. Роулинг</a></li>
+        <li><a href="{% url 'books_author' 'Гийом Мюссо' %}">Гийом Мюссо</a></li>
+        <li><a href="{% url 'books_author' 'Ю. Несбё' %}">Ю Несбё</a></li>
+    </ul><br><br>
+    <p class="text-center"><h2>Вам могут быть интересны: </h2></p>
+        {% for bbc_book in ten_bbc_books %}
+            <div class="card">
+                <div class="card">
+                    <div class="card-header">
+                        Место в рейтинге Top 200 BBC books: {{ bbc_book.id }}
+                    </div>
+                    <div class="card-body">
+                        <div class="media">
+                            <img src="{{ bbc_book.picture.url }}" height="250" width="150">
+                        </div>
+                        <div class="media-body">
+                            <h5>Название: {{ bbc_book.name }}</h5>
+                            <h5>Автор: {{ bbc_book.author }}</h5>
+                            <p class="card-text">{{ bbc_book.description|safe|linebreaks|truncatewords:25 }}</p>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a href="{% url 'info_about_book' bbc_book.id 1 %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div><br>
+        {% endfor %}
+{% endblock %}

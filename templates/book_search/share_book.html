@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Поделиться книгой{% endblock %}
+
+{% block body %}
+  {% if sent %}
+      <h1>E-mail успешно отправлен</h1>
+      <p>
+          "{{ book.name }}" было успешно отправлено {{ form.cleaned_data.email }}.
+      </p>
+  {% else %}
+      <h1>Поделиться {{ book.name }} по e-mail</h1>
+      <form action="." method="POST">
+          {% csrf_token %}
+          <table>
+              {{ form|crispy }}
+          </table>
+          <input type="submit" value="Поделиться">
+      </form>
+  {% endif %}
+{% endblock %}

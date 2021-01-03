@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load poll_extras %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <div class="main_container">
+        <div class="image">
+            <p>
+                {% if is_bbc == '0'%}
+                    {% if book.image %}
+                        <img src="{{ book.image.url }}" height="250" width="150"> <br>
+                    {% else %}
+                        <p></p>
+                    {% endif %}
+                {% elif is_bbc == '1' %}
+                    <img src="{{ book.picture.url }}" height="250" width="150"> <br>
+                {% else %}
+                    {% if book.image %}
+                        <img src="{{ book.image.url }}" height="250" width="150"> <br>
+                    {% else %}
+                        <p></p>
+                    {% endif %}
+                {% endif %}
+            </p>
+        </div>
+        <div class="title_author">
+            <p>
+                {% if user.is_authenticated %}
+                    {% if not in_list %}
+                        {% if is_bbc == '0' %}
+                            <form action="{% url 'wishlist' book.id 0 %}">
+                                <button>Добавить книгу в список желаемого</button>
+                            </form>
+                        {% elif is_bbc == '1' %}
+                            <form action="{% url 'wishlist' book.id 1 %}">
+                                <button>Добавить книгу в список желаемого</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'wishlist' book.id 2 %}">
+                                <button>Добавить книгу в список желаемого</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <p></p>
+                    {% endif %}
+                {% endif %}
+            </p>
+            <p>
+                <span>Название: </span> "{{ book.name }}"
+            </p>
+            <p>
+                <span>Автор: </span> {{ book.author }}
+            </p>
+            <p>
+                {% if is_bbc == '0' %}
+                    <form action="{% url 'share_book' book.id 0 %}">
+                        <button>Поделиться</button>
+                    </form>
+                {% elif is_bbc == '1' %}
+                    <form action="{% url 'share_book' book.id 1 %}">
+                        <button>Поделиться</button>
+                    </form>
+                {% else %}
+                   <form action="{% url 'share_book' book.id 2 %}">
+                        <button>Поделиться</button>
+                    </form>
+                {% endif %}
+            </p>
+            <p>
+                {% if user.is_authenticated %}
+                    {% if mark.value %}
+                        <p>
+                            Ваша оценка: {{ mark.value }}
+                        </p>
+                    {% else %}
+                        {% if is_bbc == '0' %}
+                            <form method="POST" action="{% url 'add_rating' book.id 0 %}">
+                                {% csrf_token %}
+                                <p>
+                                    {{ rate_form|crispy }}
+                                </p>
+                                <input type="submit" value="Оценить">
+                            </form>
+                        {% elif is_bbc == '1' %}
+                            <form method="POST" action="{% url 'add_rating' book.id 1 %}">
+                                {% csrf_token %}
+                                <p>
+                                    {{ rate_form|crispy }}
+                                </p>
+                                <input type="submit" value="Оценить">
+                            </form>
+                        {% else %}
+                            <form method="POST" action="{% url 'add_rating' book.id 2 %}">
+                                {% csrf_token %}
+                                <p>
+                                    {{ rate_form|crispy }}
+                                </p>
+                                <input type="submit" value="Оценить">
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                {% endif %} <br>
+            </p>
+            <p>
+                {% if user.is_authenticated %}
+                     {% if readd.is_read%}
+                         <p>
+                             Прочитано
+                        </p>
+                     {% else %}
+                         {% if is_bbc == '0' %}
+                            <form method="POST" action="{% url 'read' book.id 0 %}">
+                                {% csrf_token %}
+                                <p>
+                                    {{ read_form|crispy }}
+                                </p>
+                                <input type="submit" value="Отметить прочитанным">
+                            </form>
+                        {% elif is_bbc == '1' %}
+                            <form method="POST" action="{% url 'read' book.id 1 %}">
+                                {% csrf_token %}
+                                <p>
+                                    {{ read_form|crispy }}
+                                </p>
+                                <input type="submit" value="Отметить прочитанным">
+                            </form>
+                        {% else %}
+                            <form method="POST" action="{% url 'read' book.id 2 %}">
+                                {% csrf_token %}
+                                <p>
+                                    {{ read_form|crispy }}
+                                </p>
+                                <input type="submit" value="Отметить прочитанным">
+                            </form>
+                        {% endif %}
+                     {% endif %}
+                {% endif %} <br>
+            </p>
+        </div>
+        <div class="clear">
+            <h1>Описание: </h1>
+            <p>
+                {{ book.description }}
+            </p>
+        </div>
+        <div class="price">
+            <p>
+                {% for marketplace in marketplaces %}
+                    <div class="card mb-3" style="max-width: 540px; max-height: 80px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                {% if links|get_obj:marketplace.name|get_obj:'link' %}
+                                    <a href="{{ links|get_obj:marketplace.name|get_obj:'link' }}" target="_blank">
+                                        {% for link in links|get_obj:marketplace.name|get_obj:'query' %}
+                                            {% if link.name == marketplace.name %}
+                                                <img src="{{ link.picture.url }}" width="75" height="75">
+                                            {% endif %}
+                                        {% endfor %}
+                                    </a>
+                                {% else %}
+                                    {% for link in links|get_obj:marketplace.name|get_obj:'query' %}
+                                        {% if link.name == marketplace.name %}
+                                            <img src="{{ link.picture.url }}" width="75" height="75">
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <p class="card-text"><u>Цена на сайте {{ marketplace.name }}</u>: {{ links|get_obj:marketplace.name|get_obj:'price' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if user.is_authenticated %}
+                    {% if flibusta_link %}
+                        <a href="{{ flibusta_link }}">Только для своих</a>
+                    {% endif %}
+                {% endif %}
+            </p>
+        </div>
+        <br>
+        {% if not user.is_authenticated %}
+             <form action="{% url 'login' %}">
+                <button>Войдите, чтобы оставить комментарий к книге</button>
+            </form>
+        {% else %}
+            {% if is_bbc == '0' %}
+                <form action="{% url 'add_comment' book.id 0 %}">
+                    <button>Оставить комментарий</button>
+                </form>
+            {% elif is_bbc == '1' %}
+                <form action="{% url 'add_comment' book.id 1 %}">
+                    <button>Оставить комментарий</button>
+                </form>
+            {% else %}
+               <form action="{% url 'add_comment' book.id 2 %}">
+                    <button>Оставить комментарий</button>
+                </form>
+            {% endif %}
+        {% endif %} <br>
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="card">
+                    <div class="card-header">
+                         {{ comment.author_id }}
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p>{{ comment.text }}</p>
+                    </blockquote>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{ comment.created_at }}
+                    </div>
+                </div><br>
+            {% endfor %}
+        {% else %}
+            <div class="card">
+                <div class="card-body">
+                    Комментариев к данной книге пока нет. Будьте первым, кто поделится своим мнением о книге.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
