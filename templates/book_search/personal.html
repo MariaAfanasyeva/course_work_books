@@ -15,8 +15,11 @@
             <u>Ваш список желаемого пока пуст</u>
         {% endif %}
     </p>
-    <a class="nav-link" href="{% url 'add_book_top' %}">Создать свой рейтинг</a>
+    <p>
+        <a href="{% url 'add_book_top' %}">Создать свой рейтинг</a>
+    </p>
     <br><br>
+    <h5>Введите название книги, которую вы хотите добавить на наш сервис:</h5>
     <form action="{% url 'add_with_litres' %}" method="get">
         <input name="q" type="text" placeholder="Search...">
     </form>
