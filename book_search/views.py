@@ -364,7 +364,7 @@ def share_book(request, book_id, is_bbc):
             book_uri = request.build_absolute_uri(book.get_absolute_url())
             subject = '{} хочет поделиться с вами замечательной книгой!'.format(clean_data['name'],)
             body = '{} по ссылке {} \n\n Сообщение: \n {}'.format(book.name, book_uri, clean_data['message'])
-            send_mail(subject, body, 'masha.afanaseva.29@mail.ru', [clean_data['email']])
+            send_mail(subject, body, 'mymail@yandex.ru', [clean_data['email']])
             sent = True
     else:
         form = ShareBookForm()
