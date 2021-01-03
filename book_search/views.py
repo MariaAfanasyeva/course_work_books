@@ -437,13 +437,19 @@ def personal(request):
 def wish_list(request):
     genres = models.Genres.objects.all()
     user_wish_list = models.WishList.objects.filter(user_id=request.user)
-    return render(request, 'book_search/wish_list.html', {'user_wish_list': user_wish_list, 'genres': genres})
+    paginator = Paginator(user_wish_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'book_search/wish_list.html', {'page_obj': page_obj, 'genres': genres})
 
 
 def read_list(request):
     genres = models.Genres.objects.all()
     user_read_list = models.Read.objects.filter(user_id=request.user)
-    return render(request, 'book_search/book_you_read.html', {'user_read_list': user_read_list, 'genres': genres})
+    paginator = Paginator(user_read_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'book_search/book_you_read.html', {'page_obj': page_obj, 'genres': genres})
 
 
 def add_book_into_wishlist(request, book_id, is_bbc):
