@@ -1,10 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1><u>Прочитанные книги</u></h1>
+    {% for book in user_read_list %}
+        <div class="card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="media">
+                            {% if book.book_id %}
+                                <img src="{{ book.book_id.image.url }}" height="250" width="150">
+                            {% elif book.bbc_book_id %}
+                                <img src="{{ book.bbc_book_id.picture.url }}" height="250" width="150">
+                            {% else %}
+                                <img src="{{ book.top_book_id.image.url }}" height="250" width="150">
+                            {% endif %}
+                        </div>
+                        <div class="media-body">
+                            {% if book.book_id %}
+                                <h5>Название: {{ book.book_id.name }}</h5>
+                                <h5>Автор: {{ book.book_id.author }}</h5>
+                                <p class="card-text">{{ book.book_id.description|safe|linebreaks|truncatewords:25 }}</p>
+                            {% elif book.bbc_book_id %}
+                                <h5>Название: {{ book.bbc_book_id.name }}</h5>
+                                <h5>Автор: {{ book.bbc_book_id.author }}</h5>
+                                <p class="card-text">{{ book.bbc_book_id.description|safe|linebreaks|truncatewords:25 }}</p>
+                            {% else %}
+                                <h5>Название: {{ book.top_book_id.name }}</h5>
+                                <h5>Автор: {{ book.top_book_id.author }}</h5>
+                                <p class="card-text">{{ book.top_book_id.description|safe|linebreaks|truncatewords:25 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {% if book.book_id %}
+                            <a href="{% url 'info_about_book' book.book_id.id 0 %}" class="btn btn-primary">Подробнее</a>
+                        {% elif book.bbc_book_id %}
+                            <a href="{% url 'info_about_book' book.bbc_book_id.id 1 %}" class="btn btn-primary">Подробнее</a>
+                        {% else %}
+                            <a href="{% url 'info_about_book' book.top_book_id.id 2 %}" class="btn btn-primary">Подробнее</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div><br>
+    {% endfor %}
+{% endblock %}

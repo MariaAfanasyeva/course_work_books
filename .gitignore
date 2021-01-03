@@ -1,1 +1,3 @@
 /venv/
+/book_search/migrations/
+/db.sqlite3
