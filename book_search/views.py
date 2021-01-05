@@ -316,7 +316,7 @@ def add_book_into_top(request):
         if form.is_valid():
             new_book = form.save(commit=False)
             new_book.save()
-            return redirect('add_book')
+            return redirect('add_book_manual')
     else:
         form = AddBookIntoTop()
     return render(request, 'book_search/add_book_top.html', {'form': form})
