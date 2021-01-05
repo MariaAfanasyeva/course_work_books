@@ -530,6 +530,8 @@ def add_book_with_litres(request):
         book_author.pop()
         book_author = ''.join(book_author)
         desc = tree.xpath('//div[@class="biblio_book_annotation"]//div[@itemprop="description"]//p/text()')
+        if not desc:
+            desc = tree.xpath('//div[@class="biblio_book_descr"]//div[@itemprop="description"]//p/text()')
         book_description = ''
         for i in desc:
             book_description += i + '\n'
