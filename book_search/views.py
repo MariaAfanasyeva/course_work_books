@@ -502,7 +502,7 @@ def add_book_with_litres(request):
     l_list = tree.xpath('//div[@class="books_box result_box"]//div[@class="art-item__name"]//a/@href')
     if not l_list:
         messages.error(request, 'Мы не можем добавить книгу автоматически, Вы можете добавить книгу вручную.')
-        return redirect('add_book')
+        return redirect('add_book_manual')
     else:
         l_list = l_list[0]
         link_litres = 'https://www.litres.ru' + l_list
